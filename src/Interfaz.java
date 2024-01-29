@@ -32,7 +32,7 @@ public class Interfaz {
                     mostrarDatos();
                     break;
                 case 3:
-                    
+                    ordenarDatos();
                     break;
                 case 4:
                     
@@ -80,7 +80,15 @@ public class Interfaz {
         scanner.nextLine();
 
         System.out.println("\nIntroduce el nombre del equipo");
-        String nombreEquipo = scanner.nextLine();
+        String nombreEquipo;
+
+        do {
+            nombreEquipo = scanner.nextLine();
+
+            if (nombreEquipo.length() > 20) {
+                System.out.println("No es posible introducir un nombre de equipo de mas de 20 carcteres");
+            }
+        } while (nombreEquipo.length() > 20);
 
         System.out.println("Introduce los partidos que a jugado");
         int partJugados = -1;
@@ -140,19 +148,23 @@ public class Interfaz {
     // Muestra todos los datos que estan guardados en el fichero
     // En caso de que el array sea null este muestra un mensaje de error
     public static void mostrarDatos() {
-        ArrayList<String[]> datos = ficheroFutbol.mostrarLiga();
+        ArrayList<String[]> datos = ficheroFutbol.arrayLiga();
 
         if (datos == null) {
             System.out.println("\nAlgo a fallado en la lectura de este");
         }
         else {
-            System.out.print("\n");
+            System.out.println(String.format("\n%-20s %10s %10s %10s %10s %10s", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos"));
             for (String[] equipo : datos) {
-                for (int i = 0;i < equipo.length;i++) {
-                    System.out.print(equipo[i] + " ");
-                }
-                System.out.print("\n");
+                System.out.println(String.format("%-20s %8s %10s %9s %10s %11s", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]));
             }
         }
+    }
+
+    public static void ordenarDatos() {
+        int mensajeError = ficheroFutbol.ordenarLiga();
+
+        if (mensajeError == 0) {System.out.println("\nSe a ordenado los datos de forma correcta");}
+        else {System.out.println("\nNo se a podido ordenar los equipos");}
     }
 }

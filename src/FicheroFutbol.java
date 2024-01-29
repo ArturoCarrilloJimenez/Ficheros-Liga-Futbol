@@ -25,7 +25,7 @@ public class FicheroFutbol {
     }
 
     // Este metodo guarda en un arrayList (Array dinamico) un arrayd con los datos de cada equipo
-    public ArrayList<String[]> mostrarLiga() {
+    public ArrayList<String[]> arrayLiga() {
         ArrayList<String[]> arrayList = new ArrayList<>();
 
         try {
@@ -51,5 +51,68 @@ public class FicheroFutbol {
         }
 
         return arrayList;
+    }
+
+    public int ordenarLiga() {
+        int mensajeError = 0;
+        ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
+
+        if (arrayList != null) {
+            int[] puntos = new int[arrayList.size()]; // Creo un array con el tamaño del array dinamico
+            
+           // Guardo los puntos de cada equipo en un array
+            int posicionEquipo = 0;
+            for (String[] datosEquipo : arrayList) {
+                puntos[posicionEquipo] = Integer.parseInt(datosEquipo[5]);
+                posicionEquipo++;
+            }
+
+            // Realiza la comprobacion de que los puntos, en caso de no estar ordenado canvia la posiocion el los dos arrays
+            for (int j = 0;j < (puntos.length - 1);j++) {
+                if (puntos[j] < puntos[j + 1]) {
+                    // Canvio la posicion de los puntos
+                    int puntuacionMenor = puntos[j];
+                    puntos[j] = puntos[j + 1];
+
+                    puntos[j + 1] = puntuacionMenor;
+
+                    // Canvio la posicion de los datos del equipo
+                    String[] datosEquipoMenor = arrayList.get(j);
+                    
+                    arrayList.set(j, arrayList.get(j + 1));
+                    arrayList.set(j + 1, datosEquipoMenor);
+
+                    j = -1; // Vuelvo a empezar el bucle (Este es -1 para que al sumarle 1 en el bucle se quede en 0)
+                }
+            } 
+        }
+        else {mensajeError = -1;}
+
+        // Guardo los datos ordenados en el fichero
+        if (mensajeError == 0) {
+            // Borro el contenido del fichero
+            mensajeError = borrarContenidoFichero();
+
+            for (String[] datosEquipo : arrayList) {
+                mensajeError = guardarEquipo(datosEquipo[0], Integer.parseInt(datosEquipo[1]), Integer.parseInt(datosEquipo[2]), Integer.parseInt(datosEquipo[3]), Integer.parseInt(datosEquipo[4]), Integer.parseInt(datosEquipo[5]));
+            }
+        }
+
+        return mensajeError;
+    }
+
+    private int borrarContenidoFichero() {
+        int mensajeError = 0;
+        try {
+            FileWriter fileWriter = new FileWriter(NOMBRE_ARCHIVO);
+
+            fileWriter.write("");
+
+            fileWriter.close();
+        } catch (Exception e) {
+            mensajeError = -1;
+        }
+
+        return mensajeError;
     }
 }
