@@ -168,4 +168,33 @@ public class FicheroFutbol {
 
         return mensajeError;
     }
+
+    public int modificarEquipo(String nobreEquipo, int partJugados, int partGanados, int partEmpatados, int partPerdidos, int puntos){
+        int mensajeError = 0;
+        ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
+
+        String[] equipoParaActualizar = buscarEquipo(nobreEquipo);
+
+        boolean centinela = false;
+        for (int i = 0;centinela != true &&  i < arrayList.size() ;i++ ) {
+            if (Arrays.equals(equipoParaActualizar, arrayList.get(i))) {
+
+                // Guarda los datos  del nuevo equipo en la posicion correspondiente
+                equipoParaActualizar[1] = Integer.toString(partJugados);
+                equipoParaActualizar[2] = Integer.toString(partGanados);
+                equipoParaActualizar[3] = Integer.toString(partEmpatados);
+                equipoParaActualizar[4] = Integer.toString(partPerdidos);
+                equipoParaActualizar[5] = Integer.toString(puntos);
+
+                // Rescribe el array con los datos actuales
+                arrayList.set(i, equipoParaActualizar);
+
+                centinela = true;
+            }
+        }
+
+        mensajeError = rescribirFichero(arrayList);
+
+        return mensajeError;
+    }
 }

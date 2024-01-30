@@ -41,10 +41,7 @@ public class Interfaz {
                     borrarEquipo();
                     break;
                 case 6:
-                    
-                    break;
-                case 7:
-                    
+                    modificarEquipo();
                     break;
                 default:
                     System.out.println("Opcion no valida");
@@ -74,7 +71,7 @@ public class Interfaz {
     }
 
     // Opcion 1 Introducir datos de un equipo
-    // Pregunta todos los datos que necesita y despues los mada a la clase Fichero Futbol para que este lo guarde
+    // Pregunta por el nombre de un equipo y despues los manda a la clase Fichero Futbol para que este lo guarde
     public static void introducirDatos() {
 
         scanner.nextLine();
@@ -89,7 +86,20 @@ public class Interfaz {
                 System.out.println("No es posible introducir un nombre de equipo de mas de 20 carcteres");
             }
         } while (nombreEquipo.length() > 20);
+        
+        // Metodo que pregunta el resto de datos
+        int[] datosEquipo = datosEquipo();
 
+        // Guarda los datos en el fichero
+        int mensajeError = ficheroFutbol.guardarEquipo(nombreEquipo, datosEquipo[0], datosEquipo[1], datosEquipo[2], datosEquipo[3], datosEquipo[4]);
+
+        // Resultado al guardar el fichero
+        if (mensajeError == 0) {System.out.println("Se a guardado el equipo de forma correcta");}
+        else {System.out.println("No se a podido guardar el equipo");}
+    }
+
+    // Pregunta por todos los datos que de un equipo
+    public static int[] datosEquipo() {
         System.out.println("Introduce los partidos que a jugado");
         int partJugados = -1;
 
@@ -136,12 +146,9 @@ public class Interfaz {
         // Ganan 3 puntos cuando gana un partido, 1 al empatar y nada al perder
         int puntos = (partGanados * 3) + partEmpatados;
 
-        // Guarda los datos en el fichero
-        int mensajeError = ficheroFutbol.guardarEquipo(nombreEquipo, partJugados, partGanados, partEmpatados, partPerdidos, puntos);
+        int[] datos = {partJugados,partGanados,partEmpatados,partPerdidos,puntos};
 
-        // Resultado al guardar el fichero
-        if (mensajeError == 0) {System.out.println("Se a guardado el equipo de forma correcta");}
-        else {System.out.println("No se a podido guardar el equipo");}
+        return datos;
     }
 
     // Opcion 2 Mostrar datos
@@ -161,6 +168,8 @@ public class Interfaz {
         }
     }
 
+    // Opcion 3 Ordenar Datos
+    // Ordena los equipos por sus puntos obtenidos
     public static void ordenarDatos() {
         int mensajeError = ficheroFutbol.ordenarLiga();
 
@@ -168,6 +177,8 @@ public class Interfaz {
         else {System.out.println("\nNo se a podido ordenar los equipos");}
     }
 
+    // Opcion 4 Buscar equipo
+    // Pide al usuario el nombre del equipo que quiere buscar y en caso de que exista mustra los datos
     public static void  buscarEquipo() {
         System.out.println("\nQue equipo  deseas buscar");
         scanner.nextLine();
@@ -182,6 +193,8 @@ public class Interfaz {
         else {System.out.println("No se a encontrado el equipo " + nombreBuscado);}
     }
 
+    // Opcion  5 Borrar Equipos
+    // Pide al usuario el nombre del equipo que quiere borrar, si existe lo elimina deli fichero
     public static void borrarEquipo() {
         System.out.println("\nQue equipo  deseas eliminar");
         scanner.nextLine();
@@ -191,5 +204,29 @@ public class Interfaz {
 
         if (mensajeError == 0) {System.out.println("Se ha eliminado el equipo " + nombreBuscado + " correctamente");}
         else {System.out.println("No a sido posible eliminar el equipo" + nombreBuscado);}
+    }
+
+    // Opcion 6 Modificar equipo
+    // Pide al usuario el nombre del equipo que quiere modificar y si existe mustra los datos actuales por pantalla
+    // Una vez mostrados pide nuevos datos para este equipo y sustitulle los datos antiguos por los actuales
+    public static void modificarEquipo() {
+        System.out.println("\nQue equipo  deseas modificar");
+        scanner.nextLine();
+        String nombreBuscado = scanner.nextLine();
+
+        String[] equipo = ficheroFutbol.buscarEquipo(nombreBuscado);
+
+        if (equipo != null) {
+            System.out.println(String.format("\n%-20s %10s %10s %10s %10s %10s", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos"));
+            System.out.println(String.format("%-20s %8s %10s %9s %10s %11s \n", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]));
+
+            int[] datosActuales = datosEquipo();
+
+            int mensajeError = ficheroFutbol.modificarEquipo(nombreBuscado, datosActuales[0], datosActuales[1], datosActuales[2], datosActuales[3], datosActuales[4]);
+
+            if (mensajeError == 0) {System.out.println("Se ha modificado el equipo " + nombreBuscado + " correctamente");}
+            else {System.out.println("No a sido posible modificar el equipo" + nombreBuscado);}
+        }
+        else {System.out.println("No se a encontrado el equipo " + nombreBuscado);}
     }
 }
