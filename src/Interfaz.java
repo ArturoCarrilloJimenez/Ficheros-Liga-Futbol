@@ -35,10 +35,10 @@ public class Interfaz {
                     ordenarDatos();
                     break;
                 case 4:
-                    
+                    buscarEquipo();
                     break;
                 case 5:
-                    
+                    borrarEquipo();
                     break;
                 case 6:
                     
@@ -166,5 +166,30 @@ public class Interfaz {
 
         if (mensajeError == 0) {System.out.println("\nSe a ordenado los datos de forma correcta");}
         else {System.out.println("\nNo se a podido ordenar los equipos");}
+    }
+
+    public static void  buscarEquipo() {
+        System.out.println("\nQue equipo  deseas buscar");
+        scanner.nextLine();
+        String nombreBuscado = scanner.nextLine();
+
+        String[] equipo = ficheroFutbol.buscarEquipo(nombreBuscado);
+
+        if (equipo != null) {
+            System.out.println(String.format("\n%-20s %10s %10s %10s %10s %10s", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos"));
+            System.out.println(String.format("%-20s %8s %10s %9s %10s %11s", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]));
+        }
+        else {System.out.println("No se a encontrado el equipo " + nombreBuscado);}
+    }
+
+    public static void borrarEquipo() {
+        System.out.println("\nQue equipo  deseas eliminar");
+        scanner.nextLine();
+        String nombreBuscado = scanner.nextLine();
+
+        int mensajeError = ficheroFutbol.borrarEquipo(nombreBuscado);
+
+        if (mensajeError == 0) {System.out.println("Se ha eliminado el equipo " + nombreBuscado + " correctamente");}
+        else {System.out.println("No a sido posible eliminar el equipo" + nombreBuscado);}
     }
 }

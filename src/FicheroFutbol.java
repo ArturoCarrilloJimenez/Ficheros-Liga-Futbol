@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class FicheroFutbol {
     
@@ -11,6 +12,7 @@ public class FicheroFutbol {
     // Metodo que gaurda en el fichero los datos de un equipo
     public int guardarEquipo(String nobreEquipo, int partJugados, int partGanados, int partEmpatados, int partPerdidos, int puntos) {
         int mensajeError = 0;
+        
         try {
             FileWriter fileWriter = new FileWriter(NOMBRE_ARCHIVO, true);
 
@@ -59,7 +61,7 @@ public class FicheroFutbol {
 
         if (arrayList != null) {
             int[] puntos = new int[arrayList.size()]; // Creo un array con el tamaño del array dinamico
-            
+
            // Guardo los puntos de cada equipo en un array
             int posicionEquipo = 0;
             for (String[] datosEquipo : arrayList) {
@@ -90,12 +92,7 @@ public class FicheroFutbol {
 
         // Guardo los datos ordenados en el fichero
         if (mensajeError == 0) {
-            // Borro el contenido del fichero
-            mensajeError = borrarContenidoFichero();
-
-            for (String[] datosEquipo : arrayList) {
-                mensajeError = guardarEquipo(datosEquipo[0], Integer.parseInt(datosEquipo[1]), Integer.parseInt(datosEquipo[2]), Integer.parseInt(datosEquipo[3]), Integer.parseInt(datosEquipo[4]), Integer.parseInt(datosEquipo[5]));
-            }
+            rescribirFichero(arrayList);
         }
 
         return mensajeError;
@@ -112,6 +109,62 @@ public class FicheroFutbol {
         } catch (Exception e) {
             mensajeError = -1;
         }
+
+        return mensajeError;
+    }
+
+    private int rescribirFichero(ArrayList<String[]> arrayList) {
+        int mensajeError = 0;
+
+        // Borro el contenido del fichero
+        mensajeError = borrarContenidoFichero();
+
+        for (String[] datosEquipo : arrayList) {
+            mensajeError = guardarEquipo(datosEquipo[0], Integer.parseInt(datosEquipo[1]), Integer.parseInt(datosEquipo[2]), Integer.parseInt(datosEquipo[3]), Integer.parseInt(datosEquipo[4]), Integer.parseInt(datosEquipo[5]));
+        }
+
+        return  mensajeError;
+    }
+
+    public String[] buscarEquipo(String nombreEquipo) {
+        String[] equipoBuscado = null;
+        ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
+
+        if (arrayList != null) {
+            for (String[] equipo : arrayList) {
+                if (equipo[0].equals(nombreEquipo)) {
+                    equipoBuscado = equipo;
+                }
+            }
+        }
+
+        return equipoBuscado;
+    }
+
+    public int borrarEquipo(String nombreEquipo) {
+        int mensajeError = 0;
+        ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
+
+        if (arrayList  != null) {
+            String[] equipo = buscarEquipo(nombreEquipo);
+
+            if (equipo != null) {
+
+                boolean centinela = false; // Valida que se alla borrado el equipo
+
+                // Bucle que recorre el arrayList asta que se alla borrado el equipo
+                for (int i = 0;centinela != true;i++) {
+                    if (Arrays.equals(equipo, arrayList.get(i))) { // Cuando los dos  arrays son iguales es porque hemos encontrado al equipo a eliminar
+                        arrayList.remove(i);
+                        centinela = true;
+                    }
+                }
+
+                mensajeError = rescribirFichero(arrayList);
+            }
+            else {mensajeError = -1;}
+        }
+        else {mensajeError = -1;}
 
         return mensajeError;
     }
