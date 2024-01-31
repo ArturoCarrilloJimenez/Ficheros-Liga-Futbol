@@ -80,13 +80,19 @@ public class Interfaz {
             System.out.println("\nIntroduce el nombre del equipo");
             String nombreEquipo;
 
+            String[] busqueda = null;
             do {
                 nombreEquipo = scanner.nextLine();
+
+                busqueda = ficheroFutbol.buscarEquipo(nombreEquipo);
 
                 if (nombreEquipo.length() > 20) {
                     System.out.println("No es posible introducir un nombre de equipo de mas de 20 carcteres");
                 }
-            } while (nombreEquipo.length() > 20);
+                else if (busqueda != null) {
+                    System.out.println("Este equipo ya existe");
+                }
+            } while ((nombreEquipo.length() > 20) || (busqueda != null));
             
             // Metodo que pregunta el resto de datos
             int[] datosEquipo = datosEquipo();
