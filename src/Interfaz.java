@@ -74,28 +74,31 @@ public class Interfaz {
     // Pregunta por el nombre de un equipo y despues los manda a la clase Fichero Futbol para que este lo guarde
     public static void introducirDatos() {
 
-        scanner.nextLine();
+        if (ficheroFutbol.limiteEquipos() == false) {
+            scanner.nextLine();
 
-        System.out.println("\nIntroduce el nombre del equipo");
-        String nombreEquipo;
+            System.out.println("\nIntroduce el nombre del equipo");
+            String nombreEquipo;
 
-        do {
-            nombreEquipo = scanner.nextLine();
+            do {
+                nombreEquipo = scanner.nextLine();
 
-            if (nombreEquipo.length() > 20) {
-                System.out.println("No es posible introducir un nombre de equipo de mas de 20 carcteres");
-            }
-        } while (nombreEquipo.length() > 20);
-        
-        // Metodo que pregunta el resto de datos
-        int[] datosEquipo = datosEquipo();
+                if (nombreEquipo.length() > 20) {
+                    System.out.println("No es posible introducir un nombre de equipo de mas de 20 carcteres");
+                }
+            } while (nombreEquipo.length() > 20);
+            
+            // Metodo que pregunta el resto de datos
+            int[] datosEquipo = datosEquipo();
 
-        // Guarda los datos en el fichero
-        int mensajeError = ficheroFutbol.guardarEquipo(nombreEquipo, datosEquipo[0], datosEquipo[1], datosEquipo[2], datosEquipo[3], datosEquipo[4]);
+            // Guarda los datos en el fichero
+            int mensajeError = ficheroFutbol.guardarEquipo(nombreEquipo, datosEquipo[0], datosEquipo[1], datosEquipo[2], datosEquipo[3], datosEquipo[4]);
 
-        // Resultado al guardar el fichero
-        if (mensajeError == 0) {System.out.println("Se a guardado el equipo de forma correcta");}
-        else {System.out.println("No se a podido guardar el equipo");}
+            // Resultado al guardar el fichero
+            if (mensajeError == 0) {System.out.println("Se a guardado el equipo de forma correcta");}
+            else {System.out.println("No se a podido guardar el equipo");}
+        }
+        else {System.out.println("Ya hay el maximo numero de equipos permitidos, para guardar un nuevo equipo deves de borrar uno existente");}
     }
 
     // Pregunta por todos los datos que de un equipo

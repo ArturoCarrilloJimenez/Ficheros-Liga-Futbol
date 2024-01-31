@@ -8,6 +8,7 @@ public class FicheroFutbol {
     
     // Guardo en una costante el nombre del archivo
     private static final String NOMBRE_ARCHIVO = "MiLiga.txt";
+    private static final int  MAXIMO_EQUIPOS = 15;
 
     // Metodo que gaurda en el fichero los datos de un equipo
     public int guardarEquipo(String nobreEquipo, int partJugados, int partGanados, int partEmpatados, int partPerdidos, int puntos) {
@@ -24,6 +25,24 @@ public class FicheroFutbol {
         }
 
         return mensajeError;
+    }
+
+    public boolean limiteEquipos() {
+        boolean limite = false;
+        ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
+        int i = 0;
+
+        if (arrayList != null) {
+            for (int j = 0;j < arrayList.size();j++) {
+                i++;
+            }
+        }
+
+        if (i >=  MAXIMO_EQUIPOS) {
+            limite = true;      
+        }
+
+        return limite;
     }
 
     // Este metodo guarda en un arrayList (Array dinamico) un arrayd con los datos de cada equipo
