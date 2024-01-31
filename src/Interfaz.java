@@ -174,10 +174,26 @@ public class Interfaz {
     // Opcion 3 Ordenar Datos
     // Ordena los equipos por sus puntos obtenidos
     public static void ordenarDatos() {
-        int mensajeError = ficheroFutbol.ordenarLiga();
+        System.out.println("\nDe que forma quieres ordenar la liga");
+        System.out.println("1. Creciente");
+        System.out.println("2. Decreciente\n");
 
-        if (mensajeError == 0) {System.out.println("\nSe a ordenado los datos de forma correcta");}
-        else {System.out.println("\nNo se a podido ordenar los equipos");}
+        int opcion;
+
+        do {
+            opcion = introducirNumero();
+            if (opcion <  1 || opcion > 2) {
+                System.out.println("Opcion invalida");
+            }
+        } while (opcion <  1 || opcion > 2);
+
+        int mensajeError = 0;
+        
+        if (opcion == 1) {mensajeError = ficheroFutbol.ordenarLiga(1);}
+        else if(opcion == 2){mensajeError = ficheroFutbol.ordenarLiga(2);}
+
+        if (mensajeError == 0) {System.out.println("Se a ordenado los datos de forma correcta");}
+        else {System.out.println("No se a podido ordenar los equipos");}
     }
 
     // Opcion 4 Buscar equipo

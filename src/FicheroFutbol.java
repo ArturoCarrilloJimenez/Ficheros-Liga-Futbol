@@ -27,6 +27,7 @@ public class FicheroFutbol {
         return mensajeError;
     }
 
+    // Metodo que comprueba si se a llegado o no al limite de equipos
     public boolean limiteEquipos() {
         boolean limite = false;
         ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
@@ -45,7 +46,7 @@ public class FicheroFutbol {
         return limite;
     }
 
-    // Este metodo guarda en un arrayList (Array dinamico) un arrayd con los datos de cada equipo
+    // Este metodo guarda en un arrayList (Array dinamico) un array de String con los datos de cada equipo
     public ArrayList<String[]> arrayLiga() {
         ArrayList<String[]> arrayList = new ArrayList<>();
 
@@ -74,38 +75,25 @@ public class FicheroFutbol {
         return arrayList;
     }
 
-    public int ordenarLiga() {
+    // Metodo que ordena el fichero
+    public int ordenarLiga(int tipo) {
         int mensajeError = 0;
         ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
 
         if (arrayList != null) {
-            int[] puntos = new int[arrayList.size()]; // Creo un array con el tamaño del array dinamico
+            int[] puntos = new int[arrayList.size()]; // Creo un array de puntos con el tamaño del array dinamico
+            int[] partGanador = new int[arrayList.size()]; // Creo un array de puntos con el tamaño del array dinamico
 
            // Guardo los puntos de cada equipo en un array
             int posicionEquipo = 0;
             for (String[] datosEquipo : arrayList) {
                 puntos[posicionEquipo] = Integer.parseInt(datosEquipo[5]);
+                partGanador[posicionEquipo] = Integer.parseInt(datosEquipo[2]);
                 posicionEquipo++;
             }
 
-            // Realiza la comprobacion de que los puntos, en caso de no estar ordenado canvia la posiocion el los dos arrays
-            for (int j = 0;j < (puntos.length - 1);j++) {
-                if (puntos[j] < puntos[j + 1]) {
-                    // Canvio la posicion de los puntos
-                    int puntuacionMenor = puntos[j];
-                    puntos[j] = puntos[j + 1];
-
-                    puntos[j + 1] = puntuacionMenor;
-
-                    // Canvio la posicion de los datos del equipo
-                    String[] datosEquipoMenor = arrayList.get(j);
-                    
-                    arrayList.set(j, arrayList.get(j + 1));
-                    arrayList.set(j + 1, datosEquipoMenor);
-
-                    j = -1; // Vuelvo a empezar el bucle (Este es -1 para que al sumarle 1 en el bucle se quede en 0)
-                }
-            } 
+             if (tipo == 1) {arrayList = ordenarCrecientemente(arrayList, puntos, partGanador);}
+             else if (tipo == 2) {arrayList = ordenarDecreciente(arrayList, puntos, partGanador);}
         }
         else {mensajeError = -1;}
 
@@ -117,6 +105,90 @@ public class FicheroFutbol {
         return mensajeError;
     }
 
+    // Metodo que realiza la comparacion de ordenacion creciente por puntos y goles a favor
+    private int compararOrdenacionCreciente(int puntos[], int[] partGanados, int posicion) {
+        int comparacion = 0;
+        
+        if (puntos[posicion] < puntos[posicion + 1]) {comparacion = -1;}
+        else if ((puntos[posicion] == puntos[posicion + 1]) && (partGanados[posicion] < partGanados[posicion + 1])) {comparacion = -1;}
+
+        return comparacion;
+    }
+
+    // Realiza la ordenacion creciente con el metodo de la burbuja
+    private ArrayList<String[]> ordenarCrecientemente(ArrayList<String[]> arrayList, int[] puntos, int[] partGanados) {
+        // Realiza la comprobacion de que los puntos, en caso de no estar ordenado canvia la posiocion el los dos arrays
+        for (int j = 0;j < (puntos.length - 1);j++) {
+            int comparacion  = compararOrdenacionCreciente(puntos, partGanados, j);
+
+            if (comparacion == -1) {
+                // Canvio la posicion de los puntos
+                int puntuacionMenor = puntos[j];
+                puntos[j] = puntos[j + 1];
+
+                puntos[j + 1] = puntuacionMenor;
+
+                // Canvio la posicion de los partidos ganados
+                int partGanadorMenor = partGanados[j];
+                partGanados[j] = partGanados[j + 1];
+
+                partGanados[j + 1] = partGanadorMenor;
+
+                // Canvio la posicion de los datos del equipo
+                String[] datosEquipoMenor = arrayList.get(j);
+                
+                arrayList.set(j, arrayList.get(j + 1));
+                arrayList.set(j + 1, datosEquipoMenor);
+
+                j = -1; // Vuelvo a empezar el bucle (Este es -1 para que al sumarle 1 en el bucle se quede en 0)
+            }
+        }
+
+        return  arrayList;
+    }
+
+    // Metodo que realiza la comparacion de ordenacion decreciente por puntos y goles a favor
+    private int compararOrdenacionDecreciente(int puntos[], int[] partGanados, int posicion) {
+        int comparacion = 0;
+        
+        if (puntos[posicion + 1] < puntos[posicion]) {comparacion = -1;}
+        else if ((puntos[posicion + 1] == puntos[posicion]) && (partGanados[posicion + 1] < partGanados[posicion])) {comparacion = -1;}
+
+        return comparacion;
+    }
+
+    // Realiza la ordenacion decreciente con el metodo de la burbuja
+    private ArrayList<String[]> ordenarDecreciente(ArrayList<String[]> arrayList, int[] puntos, int[] partGanados) {
+        // Realiza la comprobacion de que los puntos, en caso de no estar ordenado canvia la posiocion el los dos arrays
+        for (int j = 0;j < (puntos.length - 1);j++) {
+            int comparacion = compararOrdenacionDecreciente(puntos, partGanados, j);
+
+            if (comparacion == -1) {
+                // Canvio la posicion de los puntos
+                int puntuacionMenor = puntos[j + 1];
+                puntos[j + 1] = puntos[j];
+
+                puntos[j] = puntuacionMenor;
+
+                // Canvio la posicion de los partidos ganados
+                int partGanadorMenor = partGanados[j + 1];
+                partGanados[j + 1] = partGanados[j];
+
+                partGanados[j] = partGanadorMenor;
+
+                // Canvio la posicion de los datos del equipo
+                String[] datosEquipoMenor = arrayList.get(j + 1);
+                
+                arrayList.set(j + 1, arrayList.get(j));
+                arrayList.set(j, datosEquipoMenor);
+
+                j = -1; // Vuelvo a empezar el bucle (Este es -1 para que al sumarle 1 en el bucle se quede en 0)
+            }
+        }
+        return  arrayList;
+    }
+
+    // Borra todo el contenido del fichero
     private int borrarContenidoFichero() {
         int mensajeError = 0;
         try {
@@ -132,6 +204,7 @@ public class FicheroFutbol {
         return mensajeError;
     }
 
+    // Metodo que rescribe el fichero
     private int rescribirFichero(ArrayList<String[]> arrayList) {
         int mensajeError = 0;
 
@@ -145,6 +218,7 @@ public class FicheroFutbol {
         return  mensajeError;
     }
 
+    // Metodo que realiza una busqueda del nombre del equipo
     public String[] buscarEquipo(String nombreEquipo) {
         String[] equipoBuscado = null;
         ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
@@ -160,6 +234,7 @@ public class FicheroFutbol {
         return equipoBuscado;
     }
 
+    // Metodo que elimina un equipo del fichero
     public int borrarEquipo(String nombreEquipo) {
         int mensajeError = 0;
         ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
@@ -188,6 +263,7 @@ public class FicheroFutbol {
         return mensajeError;
     }
 
+    // Metodo que rescribe un equipo con datos nuevos
     public int modificarEquipo(String nobreEquipo, int partJugados, int partGanados, int partEmpatados, int partPerdidos, int puntos){
         int mensajeError = 0;
         ArrayList<String[]> arrayList = arrayLiga(); // Guardo en un array dinamico los datos de cada equipo
