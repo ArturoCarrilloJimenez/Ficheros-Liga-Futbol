@@ -170,9 +170,9 @@ public class Interfaz {
             System.out.println("\nAlgo a fallado en la lectura de este");
         }
         else {
-            System.out.println(String.format("\n%-20s %10s %10s %10s %10s %10s", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos"));
+            System.out.printf("\n%-20s %10s %10s %10s %10s %10s\n", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos");
             for (String[] equipo : datos) {
-                System.out.println(String.format("%-20s %8s %10s %9s %10s %11s", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]));
+                System.out.printf("%-20s %8s %10s %9s %10s %11s \n", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]);
             }
         }
     }
@@ -212,8 +212,8 @@ public class Interfaz {
         String[] equipo = ficheroFutbol.buscarEquipo(nombreBuscado);
 
         if (equipo != null) {
-            System.out.println(String.format("\n%-20s %10s %10s %10s %10s %10s", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos"));
-            System.out.println(String.format("%-20s %8s %10s %9s %10s %11s", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]));
+            System.out.printf("\n%-20s %10s %10s %10s %10s %10s\n", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos");
+            System.out.printf("%-20s %8s %10s %9s %10s %11s \n", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]);
         }
         else {System.out.println("No se a encontrado el equipo " + nombreBuscado);}
     }
@@ -242,8 +242,8 @@ public class Interfaz {
         String[] equipo = ficheroFutbol.buscarEquipo(nombreBuscado);
 
         if (equipo != null) {
-            System.out.println(String.format("\n%-20s %10s %10s %10s %10s %10s", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos"));
-            System.out.println(String.format("%-20s %8s %10s %9s %10s %11s \n", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]));
+            System.out.printf("\n%-20s %10s %10s %10s %10s %10s\n", "Equipo", "Jugados", "Ganados", "Empatados", "Perdidos", "Puntos");
+            System.out.printf("%-20s %8s %10s %9s %10s %11s \n", equipo[0], equipo[1], equipo[2], equipo[3], equipo[4], equipo[5]);
 
             int[] datosActuales = datosEquipo();
 
